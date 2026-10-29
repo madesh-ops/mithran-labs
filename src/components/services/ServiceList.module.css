@@ -1,0 +1,188 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.list > li {
+  border-bottom: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 1.6rem 1rem;
+  margin-inline: -1rem;
+  border-radius: var(--r-lg);
+  transition: transform var(--d-base) var(--spring);
+}
+
+/* Glass surface that materialises behind the row on hover. */
+.row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--glass-tint-strong);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity var(--d-base) var(--ease-out),
+    transform var(--d-slow) var(--spring);
+}
+
+.index {
+  align-self: start;
+  padding-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  color: var(--ink-3);
+}
+
+.main {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.name {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.4rem);
+  line-height: 0.95;
+}
+
+.short {
+  color: var(--ink-2);
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.tags span {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+}
+
+.preview {
+  display: none;
+}
+
+.go {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  transition:
+    background-color var(--d-base) var(--ease-out),
+    border-color var(--d-base) var(--ease-out),
+    transform var(--d-base) var(--spring);
+}
+
+@media (max-width: 599px) {
+  .row {
+    grid-template-columns: 3ch minmax(0, 1fr);
+  }
+  .go {
+    display: none;
+  }
+}
+
+.go svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 900px) {
+  .row {
+    grid-template-columns: 4ch minmax(0, 1fr) 200px 52px;
+    padding: 2rem 1.5rem;
+    margin-inline: -1.5rem;
+  }
+
+  .preview {
+    display: block;
+    position: relative;
+    width: 200px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(16px) scale(0.92) rotate(-2deg);
+    transition:
+      opacity var(--d-base) var(--ease-out),
+      transform var(--d-slow) var(--spring);
+  }
+
+  .preview .previewImg {
+    height: 100%;
+    aspect-ratio: auto;
+    box-shadow: none;
+  }
+}
+
+/* Hover intent: the hover-in transition waits a beat (exit stays instant).
+   When the page scrolls under a resting pointer, each row is only hovered
+   for a moment; with the delay its transition is cancelled before a frame is
+   painted, instead of every row lifting, shadowing and sliding in its preview
+   on the way past. Deliberate hovers still respond within ~0.1s. */
+@media (hover: hover) {
+  .row:hover::before,
+  .row:hover .preview,
+  .row:hover .go {
+    transition-delay: 110ms;
+  }
+  .row:hover::before {
+    opacity: 1;
+    transform: none;
+  }
+  .row:hover .preview {
+    opacity: 1;
+    transform: none;
+  }
+  .row:hover .go {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink-0);
+    transform: rotate(-45deg);
+  }
+}
+
+@media (hover: hover) and (min-width: 900px) {
+  /* Keep each (small) preview on its own layer so showing it never re-rasterises the sketch. */
+  .preview {
+    will-change: transform, opacity;
+  }
+}
+
+.row:focus-visible::before {
+  opacity: 1;
+  transform: none;
+}
+
+.row:active {
+  transform: scale(0.99);
+  transition-duration: 100ms;
+}

@@ -1,0 +1,389 @@
+.form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.row {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+.req {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.optional {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+/* Inputs: solid, high-contrast fields on a raised panel (not floating glass). */
+.control {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.8rem 1rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 1rem; /* ≥16px avoids iOS zoom on focus */
+  font-weight: 500;
+  box-shadow: inset 0 1px 2px rgb(16 24 40 / 0.05);
+  transition:
+    border-color var(--d-fast) linear,
+    box-shadow var(--d-base) var(--ease-out),
+    background-color var(--d-fast) linear;
+  appearance: none;
+}
+
+.control::placeholder {
+  color: var(--ink-3);
+  opacity: 0.8;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:hover {
+    border-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow:
+    0 0 0 4px rgb(var(--accent-rgb) / 0.55),
+    inset 0 1px 2px rgb(16 24 40 / 0.05);
+}
+
+.control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.field[data-invalid] .control {
+  border-color: var(--danger);
+}
+
+.field[data-invalid] .control:focus-visible {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 25%, transparent);
+}
+
+.textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+  content: "";
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--ink-2);
+  border-bottom: 2px solid var(--ink-2);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.select {
+  padding-right: 2.75rem;
+  cursor: pointer;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.error svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .error {
+    animation: err-in 260ms var(--ease-out);
+  }
+}
+
+@keyframes err-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* — Chips (service picker) — */
+.chips {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.chips legend {
+  padding: 0;
+  margin-bottom: 0.45rem;
+}
+
+.chipList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition:
+    background-color var(--d-fast) linear,
+    color var(--d-fast) linear,
+    border-color var(--d-fast) linear,
+    transform var(--d-base) var(--spring);
+}
+
+.chip input:checked + span {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.chip input:focus-visible + span {
+  box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.55);
+  border-color: var(--ink);
+}
+
+.chip input:active + span {
+  transform: scale(0.96);
+}
+
+.chips[data-invalid] .chip span {
+  border-color: var(--danger);
+}
+
+/* — File input — */
+.file {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 64px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-sm);
+  border: 1.5px dashed var(--line-strong);
+  background: var(--bg);
+  transition: border-color var(--d-fast) linear;
+}
+
+.file:focus-within {
+  border-color: var(--ink);
+}
+@media (hover: hover) and (pointer: fine) {
+  .file:hover {
+    border-color: var(--ink);
+  }
+}
+
+.file input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.fileText {
+  display: grid;
+  font-weight: 600;
+}
+
+.fileText small {
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.field[data-invalid] .file {
+  border-color: var(--danger);
+}
+
+/* — Submission status — */
+.status {
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--r-md);
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status {
+    animation: status-in 420ms var(--spring);
+  }
+}
+
+@keyframes status-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.status_error {
+  background: color-mix(in srgb, var(--danger) 10%, var(--bg-raised));
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+}
+
+.status_info {
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+}
+
+.status_success {
+  background: var(--accent);
+  color: var(--ink-0);
+}
+
+.statusTitle {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.statusBody {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.statusBody a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 650;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.fineprint {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+  max-width: 44ch;
+}
+
+.fineprint a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.success {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: var(--ink-0);
+}
+
+.success h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.6rem);
+  line-height: 0.95;
+}
+
+.success ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 550;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .success {
+    animation: status-in 600ms var(--spring);
+  }
+}

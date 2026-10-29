@@ -1,0 +1,107 @@
+.layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1040px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+  .aside {
+    position: sticky;
+    top: calc(var(--nav-h) + 2.5rem);
+  }
+}
+
+.formPanel {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: var(--r-xl);
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 60px -40px rgb(16 24 40 / 0.35);
+}
+
+.aside {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  transition: transform var(--d-base) var(--spring), border-color var(--d-base) var(--ease-out);
+}
+
+.card > svg {
+  width: 24px;
+  height: 24px;
+  margin-top: 0.1rem;
+}
+
+.card > span {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.card strong {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) {
+  a.card:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+  }
+}
+
+a.card:active {
+  transform: scale(0.985);
+}
+
+.small {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+.hours {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+}
+
+.hours p {
+  font-weight: 600;
+}
+
+.socials {
+  list-style: none;
+  padding: 0.5rem 0 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+.socials a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .socials a:hover {
+    text-decoration-color: currentColor;
+  }
+}

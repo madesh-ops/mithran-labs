@@ -1,0 +1,962 @@
+/* ==========================================================================
+   Mithran Labs — design system
+   Warm paper, near-black ink and a single vermilion "signal" accent, used
+   sparingly. Surfaces are mostly solid; a light frosted material is kept
+   only for floating controls (nav, pills). All tokens live here; components
+   consume them via CSS Modules.
+   ========================================================================== */
+
+:root {
+  /* — Palette — */
+  --paper: #f5f4f0;
+  --white: #ffffff;
+  --ink-0: #141413;
+  --graphite: #1c1c1b;
+  --signal: #ff5b24;
+  --signal-rgb: 255 91 36;
+  --signal-ink: #b8400f; /* AA on paper for small text */
+
+  /* — Semantic colour (light) — */
+  --bg: var(--paper);
+  --bg-raised: var(--white);
+  --bg-sunken: #ebe9e3;
+  --ink: var(--ink-0);
+  --ink-2: #3d3c39;
+  --ink-3: #66645f;
+  --line: rgb(20 20 19 / 0.1);
+  --line-strong: rgb(20 20 19 / 0.18);
+  --accent: var(--signal);
+  --accent-rgb: var(--signal-rgb);
+  --accent-text: var(--signal-ink);
+  --on-accent: var(--ink-0);
+  --focus: #2756d8;
+  --danger: #b4231b;
+  --success: #2f7a3a;
+
+  /* — Liquid glass (floating controls only) — */
+  --glass-tint: rgb(255 255 255 / 0.46);
+  --glass-tint-strong: rgb(250 249 246 / 0.74);
+  --glass-sheen: rgb(255 255 255 / 0.5); /* top-lit gradient inside the material */
+  --glass-edge: rgb(20 20 19 / 0.07);
+  --glass-rim: rgb(255 255 255 / 0.95); /* specular rim where light catches the edge */
+  --glass-rim-2: rgb(255 255 255 / 0.45);
+  --glass-specular: rgb(255 255 255 / 0.7); /* pointer-following highlight */
+  --glass-blur: 16px;
+  --glass-sat: 190%;
+  --glass-bright: 1.06;
+  --glass-highlight: inset 0 1px 0.5px rgb(255 255 255 / 0.8), inset 0 -1px 1px rgb(255 255 255 / 0.25),
+    inset 0 0 14px -4px rgb(255 255 255 / 0.55);
+  --glass-shadow: 0 1px 2px rgb(20 20 19 / 0.05), 0 10px 30px -14px rgb(20 20 19 / 0.22);
+  --glass-shadow-lg: 0 2px 4px rgb(20 20 19 / 0.06), 0 30px 60px -24px rgb(20 20 19 / 0.32);
+
+  /* — Typography — */
+  --font-display: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-mega: clamp(3.5rem, 11vw, 10rem);
+  --fs-h1: clamp(2.6rem, 1.4rem + 5.2vw, 6.25rem);
+  --fs-h2: clamp(2rem, 1.2rem + 3.2vw, 4.25rem);
+  --fs-h3: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem);
+  --fs-lead: clamp(1.15rem, 1.02rem + 0.5vw, 1.45rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.9375rem;
+  --fs-label: 0.75rem;
+
+  /* — Space (4px base) — */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+  --section-y: clamp(4.5rem, 3rem + 7vw, 10rem);
+  --gutter: clamp(1rem, 0.5rem + 2.4vw, 3rem);
+  --max: 1440px;
+  --max-text: 68ch;
+
+  /* — Radii — */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 40px;
+  --r-pill: 999px;
+
+  /* — Motion — */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Critically damped spring (no overshoot), response ≈ 0.4s */
+  --spring: linear(0, 0.0055, 0.0219 2.1%, 0.0866 4.5%, 0.3402 11.1%, 0.5463 17.4%, 0.6962 23.4%, 0.8048 29.5%,
+      0.8786 35.5%, 0.9285 41.6%, 0.9608 47.8%, 0.9812 54.4%, 0.9926 61.7%, 0.998 70.2%, 1);
+  /* Gentle bounce — only for momentum-ish moments (indicator settle) */
+  --spring-bounce: linear(0, 0.0081, 0.0318 2%, 0.1215 4.3%, 0.4628 11.2%, 0.6995 17.3%, 0.8545 23.5%, 0.9504 29.8%,
+      1.0049 36.4%, 1.0273 43.4%, 1.0298 50.1%, 1.0212 57.8%, 1.0063 70.8%, 0.9998 85.4%, 1);
+  --d-fast: 160ms;
+  --d-base: 320ms;
+  --d-slow: 600ms;
+
+  --nav-h: 64px;
+  color-scheme: light;
+}
+
+/* — Dark theme — */
+:root[data-theme="dark"] {
+  --bg: #121211;
+  --bg-raised: var(--graphite);
+  --bg-sunken: #0b0b0a;
+  --ink: #f2f1ed;
+  --ink-2: #c9c7c1;
+  --ink-3: #9c9a94;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.18);
+  --accent-text: #ff7a4a;
+  --focus: #9ab8ff;
+  --danger: #ff8a80;
+  --success: #7fd18b;
+
+  --glass-tint: rgb(40 40 38 / 0.5);
+  --glass-tint-strong: rgb(30 30 28 / 0.8);
+  --glass-sheen: rgb(255 255 255 / 0.07);
+  --glass-edge: rgb(255 255 255 / 0.06);
+  --glass-rim: rgb(255 255 255 / 0.32);
+  --glass-rim-2: rgb(255 255 255 / 0.1);
+  --glass-specular: rgb(255 255 255 / 0.16);
+  --glass-bright: 1;
+  --glass-highlight: inset 0 1px 0.5px rgb(255 255 255 / 0.14), inset 0 -1px 1px rgb(255 255 255 / 0.04),
+    inset 0 0 18px -6px rgb(255 255 255 / 0.12);
+  --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 30px -14px rgb(0 0 0 / 0.6);
+  --glass-shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 30px 60px -24px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+/* No-JS fallback: follow the OS until the theme script sets data-theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #121211;
+    --bg-raised: var(--graphite);
+    --ink: #f2f1ed;
+    --ink-2: #c9c7c1;
+    --ink-3: #9c9a94;
+    --line: rgb(255 255 255 / 0.09);
+    --accent-text: #ff7a4a;
+    --glass-tint: rgb(40 40 38 / 0.5);
+    --glass-sheen: rgb(255 255 255 / 0.07);
+    --glass-edge: rgb(255 255 255 / 0.06);
+    --glass-rim: rgb(255 255 255 / 0.32);
+    --glass-rim-2: rgb(255 255 255 / 0.1);
+    --glass-specular: rgb(255 255 255 / 0.16);
+    color-scheme: dark;
+  }
+}
+
+/* Always-dark band (footer, CTA, featured sections) in both themes. */
+.ink-band {
+  --bg: var(--ink-0);
+  --bg-raised: #222220;
+  --bg-sunken: #262624;
+  --ink: #f2f1ed;
+  --ink-2: #c9c7c1;
+  --ink-3: #9c9a94;
+  --line: rgb(255 255 255 / 0.1);
+  --line-strong: rgb(255 255 255 / 0.2);
+  --accent-text: #ff7a4a;
+  --focus: #9ab8ff;
+  --success: #7fd18b;
+  --glass-tint: rgb(44 44 42 / 0.52);
+  --glass-tint-strong: rgb(34 34 32 / 0.84);
+  --glass-sheen: rgb(255 255 255 / 0.08);
+  --glass-edge: rgb(255 255 255 / 0.06);
+  --glass-rim: rgb(255 255 255 / 0.34);
+  --glass-rim-2: rgb(255 255 255 / 0.1);
+  --glass-specular: rgb(255 255 255 / 0.18);
+  --glass-bright: 1;
+  --glass-highlight: inset 0 1px 0.5px rgb(255 255 255 / 0.14), inset 0 0 18px -6px rgb(255 255 255 / 0.12);
+  background: var(--bg);
+  color: var(--ink);
+  color-scheme: dark;
+}
+:root[data-theme="dark"] .ink-band {
+  --bg: #1a1a19;
+  --bg-raised: #252523;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 2rem);
+  background: var(--bg);
+  transition: background-color var(--d-slow) var(--ease-out);
+}
+
+/* Native smooth anchors only when Lenis isn't running (it handles anchors itself). */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.has-smooth-scroll) {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  /* Transparent so the live background (z-index -1) shows through: a body
+     background paints above negative-z layers. <html> keeps the page colour. */
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-weight: 450;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
+}
+
+/* — Text selection: an inversion of whatever surface the text sits on —
+   Light surfaces: the text turns into an ink block with signal-orange letters.
+   Dark surfaces (dark theme, ink bands): a paper block with deep orange letters
+   (vivid orange on paper is only 2.7:1; --signal-ink is 4.9:1).
+   Orange accents (the italic serif swash): orange text on the page inverts to
+   an orange block with ink letters — so the hero headline selects as two
+   tones, mirroring its sans/serif split.
+   Only fixed palette tokens are used (no theme-dependent vars), so the colours
+   resolve the same in every engine's ::selection inheritance model. Plain
+   ::selection covers Firefox too (unprefixed since v62); ::selection can't be
+   transitioned in any browser, so there's deliberately no fade. All pairs ≥ 4.5:1. */
+::selection {
+  background-color: var(--ink-0);
+  color: var(--signal);
+  text-shadow: none;
+}
+
+:root[data-theme="dark"] ::selection,
+.ink-band::selection,
+.ink-band ::selection {
+  background-color: var(--paper);
+  color: var(--signal-ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) ::selection {
+    background-color: var(--paper);
+    color: var(--signal-ink);
+  }
+}
+
+/* `:root` lifts these above the dark-surface rules; the descendant form covers
+   a swash while it is split into pieces (during a heading's reveal, and in the
+   scroll-scrubbed statement, whose words stay split). */
+:root .swash::selection,
+:root .swash ::selection,
+:root .accent-mark::selection {
+  background-color: var(--signal);
+  color: var(--ink-0);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform var(--d-base) var(--spring);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* ==========================================================================
+   Live background (components/motion/StreakField.tsx)
+   A fixed, full-viewport layer behind everything (z-index -1 paints above
+   the root background, below all page content). 100lvh, not 100%: the
+   mobile URL bar showing/hiding must not resize (and so clear) the canvas.
+   ========================================================================== */
+
+.streak-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100lvh;
+  pointer-events: none;
+}
+
+/* No WebGL: a static rendition — thin vertical lines lit by soft bands. */
+.streak-fallback {
+  --streak: rgb(225 20 40 / 0.55);
+  background: repeating-linear-gradient(90deg, transparent 0 2px, var(--streak) 2px 3px);
+  -webkit-mask-image:
+    radial-gradient(60% 9% at 30% 18%, #000, transparent),
+    radial-gradient(70% 10% at 70% 52%, #000, transparent),
+    radial-gradient(55% 9% at 40% 84%, #000, transparent);
+  mask-image:
+    radial-gradient(60% 9% at 30% 18%, #000, transparent),
+    radial-gradient(70% 10% at 70% 52%, #000, transparent),
+    radial-gradient(55% 9% at 40% 84%, #000, transparent);
+  opacity: 0.4; /* matches the calmer live intensity */
+}
+:root[data-theme="light"] .streak-fallback {
+  --streak: rgb(184 13 36 / 0.35);
+}
+
+@media print {
+  .streak-field {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Layout primitives
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  /* Never narrower than the notch in landscape (viewport-fit=cover). */
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.section-tight {
+  padding-block: calc(var(--section-y) * 0.6);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+.display,
+.h1,
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.h1 {
+  font-size: var(--fs-h1);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+}
+
+.h3 {
+  font-family: var(--font-body);
+  font-size: var(--fs-h3);
+  font-weight: 650;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+  max-width: 46ch;
+}
+
+.body-muted {
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+
+.accent-mark {
+  color: var(--accent-text);
+}
+
+/* Accent phrase inside a heading: serif italic in the signal colour. */
+.swash {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--accent-text);
+  padding-right: 0.04em;
+}
+
+/* Inline text links */
+.text-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--d-base) var(--ease-out), color var(--d-fast);
+  padding-bottom: 1px;
+}
+@media (hover: hover) {
+  .text-link:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+}
+
+/* ==========================================================================
+   Liquid glass — floating controls only, never behind long text.
+   .glass             — nav bar, pills, small controls
+   .glass-strong      — thicker, for the mobile menu sheet
+
+   Layers, back to front:
+     1. backdrop: blur + boosted saturation/brightness (the "lensed" content)
+     2. tint + a top-lit sheen gradient (the body of the material)
+     3. inner glows (box-shadow insets) — light pooling along the edges
+     4. ::before — a specular rim, bright top-left and bottom-right
+     5. ::after  — a soft highlight that follows the pointer (Enhancers.tsx)
+   ========================================================================== */
+
+.glass,
+.glass-strong {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--glass-sheen), transparent 60%), var(--glass-tint);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+}
+
+.glass::before,
+.glass-strong::before,
+.glass::after,
+.glass-strong::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1; /* above the material, below the content (isolation: isolate) */
+}
+
+/* Specular rim: a 1px gradient ring masked out of the border box. */
+.glass::before,
+.glass-strong::before {
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--glass-rim) 0%,
+    var(--glass-rim-2) 22%,
+    transparent 45%,
+    transparent 62%,
+    var(--glass-rim-2) 85%,
+    var(--glass-rim) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+/* Pointer-following highlight. --gx/--gy are set by Enhancers on hover. */
+.glass::after,
+.glass-strong::after {
+  inset: 0;
+  background: radial-gradient(
+    var(--glass-light-size, 140px) circle at var(--gx, 50%) var(--gy, 0%),
+    var(--glass-specular),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--d-slow) var(--ease-out);
+}
+
+.glass[data-glass-lit]::after,
+.glass-strong[data-glass-lit]::after {
+  opacity: 1;
+  transition-duration: var(--d-fast);
+}
+
+.glass-strong {
+  --glass-blur: 30px;
+  --glass-light-size: 360px;
+  background: linear-gradient(180deg, var(--glass-sheen), transparent 40%), var(--glass-tint-strong);
+  box-shadow: var(--glass-highlight), var(--glass-shadow-lg);
+}
+
+/* Fallback when backdrop-filter is unsupported: near-solid tint keeps text legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-strong {
+    background: var(--bg-raised);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-strong {
+    background: var(--bg-raised);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass,
+  .glass-strong {
+    background: var(--bg-raised);
+    border-color: var(--ink);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass::before,
+  .glass-strong::before,
+  .glass::after,
+  .glass-strong::after {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Scroll reveal (progressive enhancement: only hidden once JS marks html)
+   ========================================================================== */
+
+/* Hidden until Enhancers animates them in (Web Animations API, fill: forwards). */
+html.js [data-reveal] {
+  opacity: 0;
+}
+
+@media print {
+  html.js [data-reveal] {
+    opacity: 1;
+  }
+}
+
+/* GSAP split headings (motion/Split.tsx): hidden until split so the unsplit
+   text never flashes. A failsafe shows them anyway if scripts never run. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-split]:not([data-split="scrub"]) {
+    visibility: hidden;
+    animation: split-failsafe 0s linear 4s forwards;
+  }
+}
+@keyframes split-failsafe {
+  to {
+    visibility: visible;
+  }
+}
+
+/* Scroll-scrubbed words (Split variant="scrub") change opacity every scroll
+   frame. On their own layers that's a compositor-only change; without it the
+   whole paragraph was repainted each frame — the scroll lag near the top of
+   the home page. */
+.scrub-word {
+  will-change: opacity;
+}
+/* Selecting the statement shows it at full strength (Split.tsx toggles this);
+   beats the scrub's inline opacity so the selection reads as one solid block. */
+[data-selecting] .scrub-word {
+  opacity: 1 !important;
+}
+
+/* Selection-safe heading lines (Split.tsx → layerLines): earlier lines stack
+   above later ones, so descenders draw over the next line's selection block
+   instead of disappearing under it. The heading isolates the stack. */
+[data-split] {
+  isolation: isolate;
+}
+.sel-line {
+  position: relative;
+  z-index: calc(100 - var(--line, 0));
+}
+/* Splitting can leave an empty fragment of the swash at a line start; its
+   overhang padding would show as an unhighlighted sliver mid-selection. */
+.swash:empty {
+  padding: 0;
+}
+
+/* Line masks clip at the line box; give descenders (the italic swash's j, y)
+   room so they aren't cut off mid-reveal. */
+.split-line-mask {
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+@media print {
+  html.js [data-split] {
+    visibility: visible;
+  }
+}
+
+/* ==========================================================================
+   Page transitions (React <ViewTransition> + View Transitions API)
+   ========================================================================== */
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page) {
+  animation: vt-out 180ms var(--ease-in-out) both;
+}
+::view-transition-new(.page) {
+  animation: vt-in 420ms var(--ease-out) 80ms both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.995);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ==========================================================================
+   Theme morph (ThemeToggle.tsx) — the liquid wave.
+   The old theme is a still snapshot; the new theme renders live beneath it
+   and is revealed behind a curved, leaning S-shaped edge that rolls across
+   from the toggle side (right → left), top leading. The edge is two soft
+   SVG wave masks sliding together; one drifts slightly ahead/behind the
+   other on a sine, and since the further-advanced wave defines the edge, the
+   outline keeps reshaping — a gentle ripple — without redrawing anything.
+   A thin rim of light (.theme-sheen) follows the curve on the same progress
+   value. One registered number (--morph-t, 0 → 1) drives it all: no circles,
+   no animated filters (the softness is baked into the mask images), no
+   layout work.
+   ========================================================================== */
+
+@property --morph-t {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes theme-morph {
+  from {
+    --morph-t: 0.04; /* wave starts at the screen edge, not off-screen */
+  }
+  to {
+    --morph-t: 1;
+  }
+}
+
+:root {
+  /* Each image is 3 viewports wide: blank left third, the wave in the middle,
+     solid right third. Sliding it from 0% to 100% carries the wave across. */
+  --wave-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.4'/%3E%3C/filter%3E%3Cfilter id='g' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='0.9'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b)' fill='%23000' d='M104 -20 C124 6 100 26 124 44 S168 66 158 84 S184 110 194 120 H340 V-20 Z'/%3E%3C/svg%3E");
+  --wave-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.4'/%3E%3C/filter%3E%3Cfilter id='g' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='0.9'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b)' fill='%23000' d='M114 -20 C98 4 138 24 120 42 S148 68 172 80 S178 106 190 120 H340 V-20 Z'/%3E%3C/svg%3E");
+  --wave-rim: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.4'/%3E%3C/filter%3E%3Cfilter id='g' x='-20%25' y='-50%25' width='140%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='0.9'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23g)' d='M104 -20 C124 6 100 26 124 44 S168 66 158 84 S184 110 194 120' fill='none' stroke='%23fff' stroke-opacity='0.28' stroke-width='22' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M104 -20 C124 6 100 26 124 44 S168 66 158 84 S184 110 194 120' fill='none' stroke='%23fff' stroke-opacity='0.9' stroke-width='1.6' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  /* The wave is on screen for nearly the whole run, so an even, gently
+     easing curve reads as one continuous roll. Colour settling (crossfade
+     fallback) keeps the expo-out curve; the icon answers the tap instantly. */
+  --morph-duration: 2200ms;
+  --morph-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph-flow: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* While morphing, the nav is captured with the page (not as its own layer),
+   so it morphs too instead of snapping. */
+:root.theme-morph nav[aria-label="Main"] {
+  view-transition-name: none !important;
+}
+
+:root.theme-morph::view-transition-group(root),
+:root.theme-morph::view-transition-old(root) {
+  animation: none;
+}
+/* The UA cross-fade blends the pair with plus-lighter; here the old snapshot
+   stays opaque under the masked new one, so normal compositing is correct. */
+:root.theme-morph::view-transition-old(root),
+:root.theme-morph::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+:root.theme-morph::view-transition-new(root) {
+  --ripple: calc(sin(var(--morph-t) * 720deg) * 0.03);
+  animation: theme-morph var(--morph-duration) var(--morph-flow) both;
+  -webkit-mask-image: var(--wave-a), var(--wave-b);
+  mask-image: var(--wave-a), var(--wave-b);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position:
+    calc(var(--morph-t) * 100%) 0,
+    calc((var(--morph-t) + var(--ripple)) * 100%) 0;
+  mask-position:
+    calc(var(--morph-t) * 100%) 0,
+    calc((var(--morph-t) + var(--ripple)) * 100%) 0;
+}
+
+/* The rim of light along the curve. It exists only in the new state, so it
+   gets its own layer above the page; it slides exactly with the first wave. */
+.theme-sheen {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  view-transition-name: theme-sheen;
+  background: var(--wave-rim) no-repeat;
+  background-size: 300% 100%;
+  background-position: calc(var(--morph-t) * 100%) 0;
+}
+:root[data-theme="dark"] .theme-sheen {
+  opacity: 0.45; /* light on dark reads stronger; keep it a glint, not a line */
+}
+.theme-sheen.is-running {
+  animation: theme-morph var(--morph-duration) var(--morph-flow) both;
+}
+::view-transition-group(theme-sheen),
+::view-transition-new(theme-sheen) {
+  animation: none;
+}
+
+/* Reduced motion, or no View Transitions: a short, even colour crossfade on
+   every surface (no sweep, no movement). Applied only while switching. */
+:root.theme-fade,
+:root.theme-fade *,
+:root.theme-fade *::before,
+:root.theme-fade *::after {
+  transition:
+    background-color 900ms var(--morph-ease),
+    color 900ms var(--morph-ease),
+    border-color 900ms var(--morph-ease),
+    fill 900ms var(--morph-ease),
+    stroke 900ms var(--morph-ease),
+    box-shadow 900ms var(--morph-ease) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-fade,
+  :root.theme-fade *,
+  :root.theme-fade *::before,
+  :root.theme-fade *::after {
+    transition-duration: 250ms !important;
+  }
+}
+
+/* ==========================================================================
+   Intro — first visit per session only. Markup is server-rendered in the
+   root layout and driven by the inline boot script, so it never waits on
+   hydration. The logo columns rise, the name fades in, a signal line draws.
+   ========================================================================== */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  transition: opacity 480ms var(--ease-out), visibility 0s linear 480ms;
+}
+
+html[data-intro="skip"] .intro,
+html:not(.js) .intro {
+  display: none;
+}
+
+html[data-intro="done"] .intro {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro__mark {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  width: min(64vw, 300px);
+}
+
+.intro__logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.intro__logo svg rect {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: intro-rise 700ms var(--ease-out) backwards;
+}
+.intro__logo svg rect:nth-of-type(2) {
+  animation-delay: 90ms;
+}
+.intro__logo svg rect:nth-of-type(3) {
+  animation-delay: 180ms;
+}
+.intro__logo svg rect:nth-of-type(4) {
+  animation: intro-drop 520ms var(--ease-out) 420ms backwards;
+}
+
+.intro__logo svg text {
+  animation: intro-fade 700ms var(--ease-out) 260ms backwards;
+}
+
+.intro__line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: intro-line 1100ms var(--ease-in-out) 200ms backwards;
+}
+
+@keyframes intro-rise {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes intro-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-60%);
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes intro-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__logo svg rect,
+  .intro__logo svg text,
+  .intro__line {
+    animation: none;
+  }
+}

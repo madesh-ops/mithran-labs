@@ -1,0 +1,387 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  /* viewport-fit=cover puts the page under the notch / status area; pad the
+     floating bar back out of the safe-area insets (0 where there are none). */
+  padding: calc(14px + env(safe-area-inset-top, 0px)) max(var(--gutter), env(safe-area-inset-right, 0px)) 0
+    max(var(--gutter), env(safe-area-inset-left, 0px));
+  pointer-events: none;
+}
+
+.bar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 1120px);
+  height: var(--nav-h);
+  padding: 0 8px 0 18px;
+  border-radius: var(--r-pill);
+  /* Bigger surface reads as thicker glass: more blur, wider highlight. */
+  --glass-blur: 20px;
+  --glass-light-size: 220px;
+  transform-origin: 50% 0;
+  /* Compact-on-scroll uses transform only (no width/height layout animation). */
+  transition:
+    transform var(--d-slow) var(--spring),
+    box-shadow var(--d-slow) var(--ease-out);
+}
+
+.header[data-scrolled] .bar {
+  transform: translateY(-4px) scale(0.965);
+}
+
+/* Materialize on first paint: blur + scale together, not just a fade. */
+@media (prefers-reduced-motion: no-preference) {
+  .bar {
+    animation: materialize 700ms var(--spring) backwards; /* backwards: no fill afterwards, so the scroll transition can animate transform */
+  }
+  html[data-intro="play"] .bar {
+    animation-delay: 650ms;
+  }
+}
+
+@keyframes materialize {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+    filter: blur(6px);
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 44px;
+  padding-inline: 4px;
+  margin-right: auto;
+  color: var(--ink);
+  border-radius: var(--r-sm);
+}
+
+.mark {
+  display: none;
+  width: 28px;
+  height: auto;
+}
+
+.wordmark {
+  width: 148px;
+  height: auto;
+}
+
+.linksWrap {
+  position: relative;
+  display: none;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding-inline: 1rem;
+  border-radius: var(--r-pill);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: color var(--d-fast) linear;
+}
+
+.link[data-active] {
+  color: var(--ink);
+}
+/* Hover only where a real pointer can hover: phones fake :hover on tap and
+   leave it stuck until the next tap elsewhere. Touch gets :active instead. */
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--ink);
+  }
+}
+
+/* Indicator pill. Slides with a gentle spring between links. */
+.indicator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 40px;
+  margin-top: -20px;
+  border-radius: var(--r-pill);
+  /* A droplet inside the bar: tint plus an inner rim, not a second glass layer. */
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  box-shadow:
+    inset 0 1px 0.5px rgb(255 255 255 / 0.35),
+    inset 0 -1px 1px rgb(20 20 19 / 0.06);
+  opacity: 0;
+  transition:
+    transform 520ms var(--spring-bounce),
+    width 520ms var(--spring-bounce),
+    opacity var(--d-base) var(--ease-out),
+    background-color var(--d-base) linear;
+  pointer-events: none;
+}
+
+.indicator[data-visible] {
+  opacity: 1;
+}
+
+/* While hovering a non-active link the indicator previews as a soft tint. */
+.indicator[data-hover] {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  box-shadow: none;
+}
+
+.indicator[data-hover] ~ .links .link[data-active] {
+  color: var(--ink-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cta {
+  display: none;
+}
+
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  transition:
+    background-color var(--d-fast) linear,
+    transform var(--d-base) var(--spring);
+}
+
+.iconButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconButton:hover {
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+  }
+}
+
+.iconButton:active {
+  transform: scale(0.92);
+  transition-duration: 90ms;
+}
+
+/* Theme icon: decided by CSS so it is right before hydration. Both icons share
+   one grid cell and cross-rotate — the outgoing one turns away and shrinks as
+   the incoming one turns in — on the same curve and duration as the theme
+   morph, so the icon reads as part of the same motion. */
+.themeButton > svg {
+  grid-area: 1 / 1;
+  /* Starts on the tap (expo-out) but turns slowly, in step with the morph. */
+  transition:
+    transform 1600ms var(--ease-out),
+    opacity 400ms var(--ease-out);
+}
+.sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+.moon {
+  opacity: 1;
+  transform: none;
+}
+:global(html[data-theme="dark"]) .sun {
+  opacity: 1;
+  transform: none;
+}
+:global(html[data-theme="dark"]) .moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .themeButton > svg {
+    transition: opacity 200ms linear;
+    transform: none !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .linksWrap {
+    display: block;
+  }
+  .cta {
+    display: inline-flex;
+  }
+  .menuButton {
+    display: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .wordmark {
+    display: none;
+  }
+  .mark {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   Mobile sheet (<dialog>)
+   ========================================================================== */
+
+.sheet {
+  position: fixed;
+  /* Clear the notch and home indicator (landscape iPhone especially). */
+  inset: calc(10px + env(safe-area-inset-top, 0px)) calc(10px + env(safe-area-inset-right, 0px))
+    calc(10px + env(safe-area-inset-bottom, 0px)) calc(10px + env(safe-area-inset-left, 0px));
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--r-lg);
+  color: var(--ink);
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* The header is pointer-events: none (so it never blocks the page); re-enable here. */
+  pointer-events: auto;
+}
+
+.sheet::backdrop {
+  background: rgb(11 11 12 / 0.28);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet[open] {
+    animation: sheet-in 460ms var(--spring) both;
+    transform-origin: top right;
+  }
+  .sheet[open]::backdrop {
+    animation: fade-in 300ms var(--ease-out) both;
+  }
+  .sheet[data-closing] {
+    animation: sheet-out 260ms var(--ease-in-out) both;
+  }
+  .sheet[data-closing]::backdrop {
+    animation: fade-in 260ms var(--ease-in-out) reverse both;
+  }
+  .sheet[open]:not([data-closing]) .sheetLinks li {
+    animation: link-in 520ms var(--ease-out) both;
+    animation-delay: calc(80ms + var(--i) * 40ms);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(-8px);
+    filter: blur(8px);
+  }
+}
+@keyframes sheet-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(-6px);
+    filter: blur(6px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes link-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.sheetInner {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.sheetTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 0.5rem;
+}
+
+.sheetLinks {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+.sheetLinks a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 12vw, 4rem);
+  line-height: 1;
+  color: var(--ink);
+  border-radius: var(--r-sm);
+}
+
+.sheetLinks a[data-active] {
+  color: var(--accent-text);
+}
+
+.sheetFooter {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.sheetCta {
+  width: 100%;
+}
+
+.sheetMeta {
+  display: grid;
+  gap: 0.35rem;
+  padding-inline: 0.5rem;
+  color: var(--ink-2);
+  font-weight: 550;
+}
+
+.sheetMeta a {
+  justify-self: start;
+}
+
+.sheetTheme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0 0 0.5rem;
+  border-top: 1px solid var(--line);
+}

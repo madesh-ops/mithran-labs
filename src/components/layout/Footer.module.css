@@ -1,0 +1,151 @@
+.footer {
+  position: relative;
+  /* Keep the last line clear of the home indicator (viewport-fit=cover). */
+  padding-block: clamp(4rem, 8vw, 7rem) calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  margin-top: var(--s-6);
+}
+
+.top {
+  display: grid;
+  gap: 3rem;
+}
+
+.big {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 1;
+  margin: 1rem 0 1.5rem;
+}
+
+.bigLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+.bigLink svg {
+  width: 1.2em;
+  height: 1.2em;
+  transition: transform var(--d-base) var(--spring);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bigLink:hover svg {
+    transform: translate(3px, -3px);
+  }
+}
+
+.cols {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.cols ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.cols a {
+  color: var(--ink-2);
+  font-weight: 500;
+  transition: color var(--d-fast) linear;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cols a:hover {
+    color: var(--ink);
+  }
+}
+
+.address {
+  font-style: normal;
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  color: var(--ink-2);
+  font-size: var(--fs-small);
+  max-width: 34ch;
+}
+
+.address a {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.inlineIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  margin: clamp(3rem, 7vw, 6rem) 0 2rem;
+  color: var(--ink);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.socials {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding-inline: 1rem;
+  border-radius: var(--r-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: transform var(--d-base) var(--spring);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .socials a:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.legal {
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+.legal a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 1000px) {
+  .top {
+    grid-template-columns: 1.1fr 1.4fr;
+    align-items: start;
+  }
+}

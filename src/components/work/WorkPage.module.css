@@ -1,0 +1,263 @@
+.cover {
+  object-fit: cover;
+}
+
+.caseHero {
+  padding-top: calc(var(--nav-h) + clamp(3rem, 7vw, 6rem));
+}
+
+.caseHead {
+  display: grid;
+  gap: 1.5rem 3rem;
+  margin: 1.5rem 0 clamp(2rem, 4vw, 3rem);
+}
+
+@media (min-width: 1000px) {
+  .caseHead {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: end;
+  }
+}
+
+.caseTitle {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(3.5rem, 2rem + 8vw, 10rem);
+  line-height: 0.88;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.facts div {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line-strong);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 650;
+}
+
+.facts a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.caseCover {
+  position: relative;
+  display: grid;
+  align-items: end;
+  aspect-ratio: 16 / 8;
+  padding: 5% 12% 0;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--bg-sunken);
+}
+
+.caseCover > [aria-hidden] {
+  height: 100%;
+  aspect-ratio: auto;
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@media (max-width: 700px) {
+  .caseCover {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--r-lg);
+  }
+}
+
+.intro {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+@media (min-width: 1000px) {
+  .intro {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.introText {
+  display: grid;
+  gap: 1.25rem;
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
+  line-height: 1.45;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.blocks {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.textBlock {
+  display: grid;
+  gap: 1rem 3rem;
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+@media (min-width: 1000px) {
+  .textBlock {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.textBlock h2 {
+  margin-top: 0.75rem;
+}
+
+.textBody {
+  display: grid;
+  gap: 1.1rem;
+  color: var(--ink-2);
+  font-size: 1.125rem;
+  max-width: 64ch;
+}
+
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bullets li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.bullets li::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.imgRow {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+@media (min-width: 760px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+  .trio {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.imgRow figure {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--bg-sunken);
+}
+
+.full figure {
+  border-radius: var(--r-xl);
+}
+
+.pair figure,
+.trio figure {
+  aspect-ratio: 1 / 1;
+}
+
+.pair .fitImg,
+.trio .fitImg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.sketchRow {
+  display: grid;
+  gap: 1rem;
+  align-items: end;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  border-radius: var(--r-xl);
+  background: var(--bg-sunken);
+}
+
+@media (min-width: 760px) {
+  .sketchRow {
+    grid-template-columns: 3fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+  .sketchRow.twoUp {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.next {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  margin-top: clamp(4rem, 8vw, 7rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--line-strong);
+  transition: border-color var(--d-base) var(--ease-out), background-color var(--d-base) var(--ease-out);
+}
+
+@media (min-width: 860px) {
+  .next {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.nextBody {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.nextTitle {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(2.25rem, 1.6rem + 3vw, 4.5rem);
+  line-height: 1;
+}
+
+.nextSketch {
+  transition: transform var(--d-slow) var(--spring);
+}
+
+@media (hover: hover) {
+  .next:hover {
+    border-color: var(--ink);
+    background: var(--bg-raised);
+  }
+  .next:hover .nextSketch {
+    transform: translateY(-6px);
+  }
+}
+
+/* — Open slot on the work index — */
+.openSlot {
+  padding: clamp(2rem, 5vw, 4rem);
+  border-radius: var(--r-xl);
+  border: 1px dashed var(--line-strong);
+}

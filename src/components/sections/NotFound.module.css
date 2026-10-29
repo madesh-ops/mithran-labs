@@ -1,0 +1,67 @@
+.wrap {
+  min-height: 92svh;
+  display: grid;
+  align-items: center;
+  padding-top: calc(var(--nav-h) + 4rem);
+  padding-bottom: 4rem;
+}
+
+.wrap :global(.container) {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+}
+
+.code {
+  display: flex;
+  align-items: center;
+  gap: 0.05em;
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-size: clamp(8rem, 30vw, 22rem);
+  line-height: 0.85;
+}
+
+/* The zero is a glass lens — a nod to the homepage. */
+.zero {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.84em;
+  border-radius: 50%;
+  margin-inline: 0.04em;
+  --glass-blur: 10px;
+  --glass-light-size: 60%;
+  /* Caustics: a lens with nothing behind it still bends light — a bright
+     spot up top and a faint signal-coloured glow pooling at the bottom. */
+  background:
+    radial-gradient(40% 28% at 32% 22%, rgb(255 255 255 / 0.55), transparent 70%),
+    radial-gradient(60% 40% at 62% 88%, rgb(var(--signal-rgb) / 0.22), transparent 70%),
+    linear-gradient(180deg, var(--glass-sheen), transparent 60%),
+    var(--glass-tint);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .zero {
+    animation: bob 6s var(--ease-in-out) infinite alternate;
+  }
+}
+
+@keyframes bob {
+  to {
+    transform: translateY(-6%) rotate(-4deg);
+  }
+}
+
+.title {
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}

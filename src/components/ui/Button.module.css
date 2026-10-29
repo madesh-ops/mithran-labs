@@ -1,0 +1,122 @@
+.button {
+  --h: 52px;
+  --px: 1.5rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: var(--h);
+  padding-inline: var(--px);
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition:
+    transform var(--d-base) var(--spring),
+    background-color var(--d-fast) linear,
+    box-shadow var(--d-base) var(--ease-out),
+    color var(--d-fast) linear;
+}
+
+.sm {
+  --h: 42px;
+  --px: 1.1rem;
+  font-size: 0.9375rem;
+}
+
+.lg {
+  --h: 60px;
+  --px: 1.9rem;
+  font-size: 1.0625rem;
+}
+
+/* Press feedback: instant on pointer-down. */
+.button:active:not([aria-disabled="true"]):not(:disabled) {
+  transform: scale(0.965);
+  transition-duration: 90ms;
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* — Primary: solid signal, flat — */
+.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 1px 2px rgb(20 20 19 / 0.12);
+}
+
+/* — Ink: solid dark (used on light, high emphasis but not the hero CTA) — */
+.ink {
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.16);
+}
+
+/* — Glass: the material, for secondary actions — */
+.glassVariant {
+  color: var(--ink);
+}
+
+/* — Ghost: text-weight action with an underline arrow — */
+.ghost {
+  --px: 0.25rem;
+  color: var(--ink);
+  border-radius: var(--r-xs);
+}
+
+@media (hover: hover) {
+  .primary:hover {
+    background: color-mix(in srgb, var(--accent) 88%, white);
+    transform: translateY(-1px);
+  }
+  .ink:hover {
+    transform: translateY(-1px);
+  }
+  .glassVariant:hover {
+    transform: translateY(-1px);
+  }
+  .button:hover .icon {
+    transform: translateX(3px);
+  }
+}
+
+.icon {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  transition: transform var(--d-base) var(--spring);
+}
+
+.spinner {
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.6s;
+  }
+}
