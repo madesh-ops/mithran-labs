@@ -28,8 +28,12 @@ jobs:
           node-version: 22
           cache: npm
 
+      # `npm install`, not `npm ci`: the lock file is generated on Windows,
+      # where npm leaves out Linux-only optional packages (e.g. @emnapi/* for
+      # sharp's wasm build), and `npm ci` refuses a lock that's missing them.
+      # Locked versions are still respected; only those entries are filled in.
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Configure Pages
         id: pages
