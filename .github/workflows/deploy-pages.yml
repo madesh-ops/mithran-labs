@@ -49,10 +49,10 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
         run: npm run build
 
-      # Pages runs Jekyll by default, which hides folders starting with "_"
-      # (like Next's /_next assets); this marker turns that off.
-      - name: Disable Jekyll
-        run: touch out/.nojekyll
+      # Static-host fixes: flat prefetch payload names, and .nojekyll so Pages
+      # serves /_next. See scripts/finalize-pages.mjs.
+      - name: Finalize static export
+        run: node scripts/finalize-pages.mjs
 
       - uses: actions/upload-pages-artifact@v3
         with:

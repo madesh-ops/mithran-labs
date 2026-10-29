@@ -4,7 +4,9 @@
 // GitHub Pages serves static files only, so the Pages build:
 //  - drops server-only routes (src/app/api: the contact form's email endpoint);
 //  - turns Cache Components off (see next.config.ts), so Cache Components-only
-//    route segment config (`export const instant = …`) is removed too.
+//    route segment config (`export const instant = …`) is removed too;
+//  - marks sitemap.xml and robots.txt static, which `output: "export"`
+//    requires (and which Cache Components forbids in the normal build).
 //
 // It edits files in place, so it refuses to run outside CI unless forced:
 //   node scripts/prepare-pages.mjs --force
@@ -32,4 +34,11 @@ for (const file of walk(app).filter((f) => /\.(tsx?|jsx?)$/.test(f))) {
     fs.writeFileSync(file, out);
     console.log("removed `instant` config from", path.relative(root, file));
   }
+}
+
+for (const name of ["sitemap.ts", "robots.ts"]) {
+  const file = path.join(app, name);
+  if (!fs.existsSync(file)) continue;
+  fs.appendFileSync(file, '\nexport const dynamic = "force-static";\n');
+  console.log("marked static:", path.relative(root, file));
 }
