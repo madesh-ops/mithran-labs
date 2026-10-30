@@ -34,12 +34,18 @@
   transform: translateY(-4px) scale(0.965);
 }
 
-/* During a view transition the bar is drawn as its own snapshot, which has
-   nothing behind it to blur: the glass would turn clear and let the page
-   underneath show through sharp. Hold it on the near-solid tint until the
-   transition ends. */
+/* During a view transition the bar is drawn as its own snapshot, and Chrome
+   can't composite its backdrop-filter there: the blur comes out as a
+   hard-edged box (worst with Windows display scaling) and the page shows
+   through sharp. Drop the blur and hold the bar opaque — its tint over the
+   page colour, how it looks over empty background — until the transition ends. */
 :global(:root:active-view-transition) .bar {
-  background: linear-gradient(180deg, var(--glass-sheen), transparent 40%), var(--glass-tint-strong);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background:
+    linear-gradient(180deg, var(--glass-sheen), transparent 40%),
+    linear-gradient(var(--glass-tint-strong), var(--glass-tint-strong)),
+    var(--bg);
 }
 
 /* Materialize on first paint: blur + scale together, not just a fade. */
