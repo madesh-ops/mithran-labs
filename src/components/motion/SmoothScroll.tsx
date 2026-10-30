@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { attachLenis } from "./scrollBus";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -69,6 +69,30 @@ export function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Momentum carry-over guard. Lenis drops its own inertia when a link is
+    // clicked (stopInertiaOnNavigate), but a trackpad keeps streaming momentum
+    // wheel events for a second or more after the finger lifts. Fed into the
+    // new page, they scroll it straight back down past Next's scroll-to-top
+    // (the Work page would open near its footer). So from a navigating click
+    // until the stream pauses, wheel input is swallowed. Momentum only ever
+    // decays, so input that grows again is a fresh gesture and passes through.
+    let guardUntil = 0; // hard cap
+    let lastWheel = 0;
+    let lastDelta = Infinity;
+    const startGuard = (at: number) => {
+      guardUntil = at + 3000;
+      lastWheel = at;
+      lastDelta = Infinity;
+    };
+    const onClickCapture = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a || (a.target && a.target !== "_self")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin === location.origin && url.pathname !== location.pathname) startGuard(e.timeStamp);
+    };
+    document.addEventListener("click", onClickCapture, true);
+
     const lenis: Lenis = new Lenis({
       autoRaf: false, // driven by gsap.ticker below
       lerp: 0.13, // responsive but silky; lower = floatier
@@ -82,6 +106,19 @@ export function SmoothScroll() {
       virtualScroll: (data) => {
         const d = data.deltaY;
         if (!d || !data.event.type.includes("wheel")) return true;
+        if (guardUntil) {
+          // The event's own timestamp, not now: events queued behind a long
+          // frame (the route swap) must not look like a pause in the stream.
+          const now = data.event.timeStamp;
+          if (now < guardUntil && now - lastWheel < 300 && Math.abs(d) <= lastDelta * 1.2 + 2) {
+            lastWheel = now;
+            lastDelta = Math.abs(d);
+            // false only makes Lenis skip it; the browser would still scroll natively.
+            data.event.preventDefault();
+            return false;
+          }
+          guardUntil = 0;
+        }
         const limit = lenis.limit;
         // Speed in px per 60fps frame, so 120Hz screens brake the same way.
         const speed = Math.abs(lenis.velocity) / Math.max(gsap.ticker.deltaRatio(60), 0.25);
@@ -106,6 +143,7 @@ export function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      document.removeEventListener("click", onClickCapture, true);
       gsap.ticker.remove(tick);
       gsap.ticker.lagSmoothing(500, 33);
       offScroll();
@@ -116,9 +154,14 @@ export function SmoothScroll() {
     };
   }, []);
 
-  // New page: re-measure the scroll height (inertia is cut by stopInertiaOnNavigate).
-  useEffect(() => {
-    lenisRef.current?.resize();
+  // New page: re-measure the scroll height and settle Lenis where the page
+  // actually is. A layout effect, so it lands before Lenis's next frame could
+  // write a stale, still-easing position over Next's scroll-to-top.
+  useLayoutEffect(() => {
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    lenis.resize();
+    lenis.scrollTo(window.scrollY, { immediate: true, force: true });
   }, [pathname]);
 
   return null;

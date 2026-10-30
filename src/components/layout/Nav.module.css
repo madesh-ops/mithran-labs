@@ -34,6 +34,14 @@
   transform: translateY(-4px) scale(0.965);
 }
 
+/* During a view transition the bar is drawn as its own snapshot, which has
+   nothing behind it to blur: the glass would turn clear and let the page
+   underneath show through sharp. Hold it on the near-solid tint until the
+   transition ends. */
+:global(:root:active-view-transition) .bar {
+  background: linear-gradient(180deg, var(--glass-sheen), transparent 40%), var(--glass-tint-strong);
+}
+
 /* Materialize on first paint: blur + scale together, not just a fade. */
 @media (prefers-reduced-motion: no-preference) {
   .bar {
