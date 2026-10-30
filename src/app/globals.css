@@ -204,9 +204,14 @@ html {
   transition: background-color var(--d-slow) var(--ease-out);
 }
 
-/* Native smooth anchors only when Lenis isn't running (it handles anchors itself). */
+/* Native smooth anchors only without JavaScript; with it, Lenis handles
+   anchors. Keyed on .js (set by the boot script before anything runs), not on
+   Lenis mounting: ScrollTrigger samples <html>'s scroll-behavior when it first
+   sees the page and, if that's smooth, re-applies it inline after every
+   refresh — which turned Next's scroll-to-top on navigation into a glide that
+   the next refresh cancelled, so pages opened mid-scroll. */
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.has-smooth-scroll) {
+  html:not(.js) {
     scroll-behavior: smooth;
   }
 }
