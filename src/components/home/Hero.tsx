@@ -1,7 +1,7 @@
 import { LogoMark } from "@/components/brand/Logo";
 import { Split } from "@/components/motion/Split";
 import { Button } from "@/components/ui/Button";
-import { SiteSketch } from "@/components/ui/SiteSketch";
+import { HeroBuild } from "./HeroBuild";
 import styles from "./Hero.module.css";
 
 const strip = ["Custom design", "Development", "E-commerce", "Redesigns", "Performance", "Maintenance"];
@@ -33,12 +33,7 @@ export function Hero() {
         </div>
 
         <div className={styles.visual}>
-          <div data-parallax="40">
-            <SiteSketch kind="business" animate className={styles.desktop} label="yourbusiness.com" />
-          </div>
-          <div className={styles.phoneWrap} data-parallax="130">
-            <SiteSketch kind="business" device="phone" animate className={styles.phone} />
-          </div>
+          <HeroBuild desktopClass={styles.desktop} phoneClass={styles.phone} phoneWrapClass={styles.phoneWrap} />
         </div>
       </div>
 
