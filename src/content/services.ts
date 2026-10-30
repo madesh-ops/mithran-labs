@@ -89,7 +89,7 @@ export const services: Service[] = [
       "Technical SEO: titles, descriptions, sitemap, structured data",
       "Optional content management system with a walkthrough",
     ],
-    projects: ["agency-website-redesign"],
+    projects: ["aura-the-label"],
     faqs: [
       { q: "Can I edit the website myself?", a: "Yes, if you want to. We can set up a content management system for the pages you update often, or keep the site code-managed if you'd rather we handle changes. We'll recommend one during planning." },
       { q: "Do you write the content?", a: "We can structure and edit content and write page copy as part of the scope, or work from content you supply. Either way, the content plan is settled before design so nothing is designed around placeholder text." },
@@ -195,7 +195,7 @@ export const services: Service[] = [
       "Product import from your existing catalogue",
       "Team walkthrough and documentation",
     ],
-    projects: [],
+    projects: ["aura-the-label"],
     faqs: [
       { q: "Which e-commerce platform should I use?", a: "It depends on the size of your catalogue, the features you need and who will run the store. Managed platforms are usually quicker and cheaper to run; custom builds offer more control. We'll recommend one after discovery." },
       { q: "Can you move my products from my current store?", a: "Usually, yes — most platforms export products in a format we can import. We'll check your current setup during discovery." },
@@ -231,7 +231,7 @@ export const services: Service[] = [
       "301 redirect map from old URLs",
       "Before-and-after speed comparison",
     ],
-    projects: ["agency-website-redesign"],
+    projects: [],
     faqs: [
       { q: "Will a redesign hurt my search rankings?", a: "Not if it's handled carefully. We map every important old URL to its new home with permanent redirects, keep page titles and descriptions intentional, and check for broken links before launch." },
       { q: "Can you keep my existing content?", a: "Yes. We migrate the content that still serves you, and flag pages that are outdated or duplicated so you can decide what to keep." },

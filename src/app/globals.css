@@ -354,13 +354,13 @@ ol[role="list"] {
 }
 
 /* ==========================================================================
-   Live background (components/motion/StreakField.tsx)
+   Live background (components/motion/TopoField.tsx)
    A fixed, full-viewport layer behind everything (z-index -1 paints above
    the root background, below all page content). 100lvh, not 100%: the
    mobile URL bar showing/hiding must not resize (and so clear) the canvas.
    ========================================================================== */
 
-.streak-field {
+.topo-field {
   position: fixed;
   top: 0;
   left: 0;
@@ -371,26 +371,17 @@ ol[role="list"] {
   pointer-events: none;
 }
 
-/* No WebGL: a static rendition — thin vertical lines lit by soft bands. */
-.streak-fallback {
-  --streak: rgb(225 20 40 / 0.55);
-  background: repeating-linear-gradient(90deg, transparent 0 2px, var(--streak) 2px 3px);
-  -webkit-mask-image:
-    radial-gradient(60% 9% at 30% 18%, #000, transparent),
-    radial-gradient(70% 10% at 70% 52%, #000, transparent),
-    radial-gradient(55% 9% at 40% 84%, #000, transparent);
-  mask-image:
-    radial-gradient(60% 9% at 30% 18%, #000, transparent),
-    radial-gradient(70% 10% at 70% 52%, #000, transparent),
-    radial-gradient(55% 9% at 40% 84%, #000, transparent);
-  opacity: 0.4; /* matches the calmer live intensity */
-}
-:root[data-theme="light"] .streak-fallback {
-  --streak: rgb(184 13 36 / 0.35);
+/* No WebGL: a static rendition — two sets of contour rings in the ink colour,
+   so it follows the theme on its own. */
+.topo-fallback {
+  --topo: color-mix(in srgb, var(--ink) 7%, transparent);
+  background:
+    repeating-radial-gradient(ellipse 120% 90% at 78% 22%, transparent 0 46px, var(--topo) 46px 47px),
+    repeating-radial-gradient(ellipse 110% 80% at 18% 92%, transparent 0 58px, var(--topo) 58px 59px);
 }
 
 @media print {
-  .streak-field {
+  .topo-field {
     display: none;
   }
 }

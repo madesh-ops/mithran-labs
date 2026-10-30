@@ -105,49 +105,6 @@ export const projects: Project[] = [
       ],
     },
   },
-  {
-    slug: "agency-website-redesign",
-    name: "Agency website redesign",
-    client: "Uncommissioned concept",
-    year: "2026",
-    categories: ["concept"],
-    services: ["Redesign", "Design", "Development"],
-    summary:
-      "A complete redesign proposed to a branding and digital agency. It wasn't taken forward, and the client's name and content have been removed. Its codebase became the foundation for this site.",
-    sketch: "agency",
-    tile: "wide",
-    caseStudy: {
-      intro: [
-        "This was a full website redesign and rebuild for a creative agency, prepared as a working proposal rather than a commissioned project. The agency didn't go ahead, so we've removed its name, brand and content, and describe only our own design and engineering work.",
-        "Nothing here is presented as a result for a client. It shows how we approach a redesign: audit what exists, keep what works, and rebuild the rest properly.",
-      ],
-      sections: [
-        {
-          kind: "text",
-          eyebrow: "The brief we set",
-          title: "Turn a sprawling site into a clear one",
-          body: [
-            "The existing site spread a small set of services across many thin pages. The redesign consolidated them into a handful of substantial service pages, an editorial portfolio and a single enquiry flow.",
-          ],
-          bullets: [
-            "Every old URL mapped to its new home with permanent redirects, so existing links and search results would keep working",
-            "A filterable, editorial portfolio grid whose filter state could be linked to and shared",
-            "Light and dark themes, page transitions and scroll reveals, all respecting reduced-motion settings",
-            "Enquiry and application forms with server-side validation and an honest message when email isn't configured",
-          ],
-        },
-        { kind: "sketch", sketches: [{ kind: "redesign" }, { kind: "agency" }] },
-        {
-          kind: "text",
-          eyebrow: "What carried over",
-          title: "A foundation worth reusing",
-          body: [
-            "When the proposal wasn't taken up, the engineering was too good to throw away. Its layout system, motion, forms and accessibility work became the starting point for the Mithran Labs website, with a new identity, new content and only the pages a web studio needs.",
-          ],
-        },
-      ],
-    },
-  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);

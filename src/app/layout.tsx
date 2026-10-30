@@ -6,7 +6,7 @@ import { Nav } from "@/components/layout/Nav";
 import { Enhancers } from "@/components/motion/Enhancers";
 import { IntroBoot } from "@/components/motion/IntroBoot";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
-import { StreakField } from "@/components/motion/StreakField";
+import { TopoField } from "@/components/motion/TopoField";
 import { JsonLd, organizationJsonLd } from "@/lib/seo";
 import { site } from "@/content/site";
 import "lenis/dist/lenis.css";
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body suppressHydrationWarning>
         <IntroBoot />
-        <StreakField />
+        <TopoField />
         <div className="intro" aria-hidden="true">
           <div className="intro__mark">
             <div className="intro__logo">
