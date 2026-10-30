@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
   // Next blocks its dev resources for any host other than localhost, and the
   // page on the phone runs half-broken. Each * matches one address segment.
   allowedDevOrigins: ["192.168.*.*"],
+  // next/image doesn't apply basePath to string `src`s; Picture.tsx adds it.
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
   // Off for the static export: every page is prerendered anyway, and with
   // Cache Components on, metadata routes (sitemap.xml, robots.txt) can't be
   // marked static, which `output: "export"` requires. The site uses no

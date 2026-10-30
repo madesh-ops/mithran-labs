@@ -46,6 +46,23 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "aura-the-label",
+    name: "AURA",
+    client: "Client project — AURA, men's shirts",
+    year: "2026",
+    categories: ["client"],
+    services: ["Design", "Development", "Brand site"],
+    summary:
+      "A brand website for AURA, a men's shirt label where streetwear meets minimalism: an editorial home page, the first collection with checkout through Amazon, and a VIP waitlist for the next drop.",
+    cover: {
+      src: "/work/aura-the-label.webp",
+      alt: "The AURA homepage: a large serif AURA wordmark on near-black, with the line “Presence, Defined.” and an Explore Collection button.",
+    },
+    sketch: "store",
+    tile: "wide",
+    liveUrl: "https://aurathelabel.vercel.app/",
+  },
+  {
     slug: "mithran-labs-website",
     name: "Mithran Labs website",
     client: "In-house",
